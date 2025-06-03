@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> 
+            Rock Paper Scissors
+        </title>
+
+        <link rel="stylesheet" href="rockPaperScissors.css">
+    </head>
+
+    <body>
+       <p class="title"> Rock Paper Scissors</p>
+       <div class="button-box">
+            <button class="rock-button" onclick="playGame('ROCK');"> Rock </button>
+            <button class="paper-button" onclick="playGame('PAPER');"> Paper</button>
+            <button class="scissors-button" onclick="playGame('SCISSORS');"> Scissors</button> 
+            <button class="reset-button" onclick="resetScore();"> Reset Score</button>
+            <p class="output"> </p>
+       </div>
+       
+
+       
+
+        <script>
+
+            //gets the score from the local storage and if it doesn't exist creates an object with wins, losses and ties with the starting value of 0. 
+            let score=JSON.parse(localStorage.getItem('score')) || {Wins:0, Losses:0, Ties:0}
+
+            function computerPlays(){
+                //generates random number between 0 and 31(exclusive)
+                //Math.floor rounds the number into nearest whole number 
+                let generateNum=Math.floor(Math.random()*31)
+                let computerMove='';
+
+                //chooses either rock, paper or scissors based on the random generated number 
+                if (generateNum<=10){
+                    computerMove='ROCK';
+                }
+                else if (generateNum<=20 && generateNum>10){
+                    computerMove='PAPER';
+                }
+                else if (generateNum<=30 && generateNum<20){
+                    computerMove='SCISSORS';
+                }
+
+                //returns the computer move. 
+                return computerMove;
+            }
+
+            function playGame(humanMove){
+                let computerMove=computerPlays();
+                let output='';
+
+                if (humanMove==='ROCK'){
+                    if(computerMove==='ROCK'){
+                        score.Ties +=1;
+                    }
+                    else if (computerMove==='PAPER'){
+                        score.Losses +=1;
+                    }
+                    else if (computerMove==='SCISSORS'){
+                        score.Wins +=1;
+                    }
+                }
+                else if (humanMove==='PAPER'){
+                    if(computerMove==='PAPER'){
+                        score.Ties +=1;
+                    }
+                    else if (computerMove==='SCISSORS'){
+                        score.Losses +=1;
+                    }
+                    else if (computerMove==='ROCK'){
+                        score.Wins +=1;
+                    }
+                }
+                else if (humanMove==='SCISSORS'){
+                    if(computerMove==='SCISSORS'){
+                        score.Ties +=1;
+                    }
+                    else if (computerMove==='PAPER'){
+                        score.Losses +=1;
+                    }
+                    else if (computerMove==='ROCK'){
+                        score.Wins +=1;
+                    }
+                }
+
+                document.querySelector('.output').innerHTML=`Rounds won: ${score.Wins}, Rounds lost: ${score.Losses}, Ties: ${score.Ties}`;
+                localStorage.setItem('score', JSON.stringify(score));
+
+                
+            }
+
+            function resetScore(){
+                    score.Wins=0;
+                    score.Losses=0;
+                    score.Ties=0;
+
+                    localStorage.removeItem('score');
+                    document.querySelector('.output').innerHTML=`Rounds won: ${score.Wins}, Rounds lost: ${score.Losses}, Ties: ${score.Ties}`;
+
+                }
+          
+        </script>
+       
+    </body>
+</html>
